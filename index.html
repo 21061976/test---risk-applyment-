@@ -1,1 +1,429 @@
-
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זרימת נתונים - ממשק לענן</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+        
+        .workflow {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .step-description {
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+        
+        .step-tech {
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #27ae60;
+        }
+        
+        .cloud-section {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .cloud-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .cloud-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .cloud-option {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .cloud-option h3 {
+            margin-bottom: 15px;
+            color: #dff6ff;
+        }
+        
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .pros {
+            background: #d5f4e6;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .cons {
+            background: #fadbd8;
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .pros h3 {
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        
+        .cons h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+        }
+        
+        .cost-breakdown {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .cost-breakdown h3 {
+            color: #856404;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .cost-table th,
+        .cost-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ffeaa7;
+        }
+        
+        .cost-table th {
+            background: #f8d7da;
+            font-weight: bold;
+        }
+        
+        .recommended {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .recommended h2 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #3498db;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .cloud-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 מהממשק שלך לדוח המקצועי</h1>
+            <p>איך הנתונים זורמים מהממשק לענן ובחזרה כדוח מוכן</p>
+        </div>
+        
+        <div class="workflow">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">המנהל נכנס לממשק ניהול הסיכונים</div>
+                    <div class="step-description">
+                        המנהל פותח את הקישור שלך: <strong>risk-management interface</strong><br>
+                        רואה ממשק יפה ונוח לשימוש
+                    </div>
+                    <div class="step-tech">URL: https://your-domain.com/risk-management</div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">מזין מסמך תפיסה ופרטי פרויקט</div>
+                    <div class="step-description">
+                        מעלה קובץ או מדביק טקסט של מסמך התפיסה<br>
+                        ממלא פרטים נוספים (שם פרויקט, מנהל, היקף וכו')
+                    </div>
+                    <div class="step-tech">Frontend: HTML/JS שולח נתונים לשרת</div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">הנתונים נשלחים לענן שלך</div>
+                    <div class="step-description">
+                        הממשק שולח את הטקסט לשרת שלך (Google Cloud/Colab)<br>
+                        השרת מקבל את הבקשה ומתחיל לעבד
+                    </div>
+                    <div class="step-tech">POST /api/analyze → Cloud Function</div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">Claude מנתח את המסמך</div>
+                    <div class="step-description">
+                        השרת שולח את הטקסט ל-Claude API<br>
+                        Claude מנתח ומחזיר ניתוח מקצועי מובנה (JSON)
+                    </div>
+                    <div class="step-tech">Claude API → Risk Analysis + Compliance Report</div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <div class="step-title">יצירת דוח HTML מעוצב</div>
+                    <div class="step-description">
+                        השרת לוקח את הניתוח מ-Claude<br>
+                        יוצר דוח HTML יפה (כמו הדוגמה של פרויקט 720)
+                    </div>
+                    <div class="step-tech">Template Engine → Beautiful HTML Report</div>
+                </div>
+            </div>
+            
+            <div class="arrow">⬇️</div>
+            
+            <div class="step">
+                <div class="step-number">6</div>
+                <div class="step-content">
+                    <div class="step-title">המנהל מקבל קישור לדוח</div>
+                    <div class="step-description">
+                        הממשק מציג קישור לדוח המוכן<br>
+                        המנהל יכול לראות, לערוך ולהדפיס את הדוח
+                    </div>
+                    <div class="step-tech">https://your-domain.com/reports/project-123</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cloud-section">
+            <h2>☁️ איפה זה יושב בענן?</h2>
+            
+            <div class="cloud-options">
+                <div class="cloud-option">
+                    <h3>🔥 אפשרות 1: Google Cloud Functions</h3>
+                    <p><strong>מה זה:</strong> פונקציות קטנות שרצות בענן גוגל</p>
+                    <p><strong>איך זה עובד:</strong> כל פעם שמנהל שולח מסמך, הפונקציה מתעוררת, עובדת עם Claude, ומחזירה דוח</p>
+                    <p><strong>עלות:</strong> משלם רק על שימוש בפועל</p>
+                </div>
+                
+                <div class="cloud-option">
+                    <h3>⚡ אפשרות 2: Google Colab Pro</h3>
+                    <p><strong>מה זה:</strong> מחשב וירטואלי שרץ 24/7 בגוגל</p>
+                    <p><strong>איך זה עובד:</strong> כל הקוד רץ שם, המנהלים מתחברים אליו</p>
+                    <p><strong>עלות:</strong> $10 לחודש קבוע</p>
+                </div>
+                
+                <div class="cloud-option">
+                    <h3>🏗️ אפשרות 3: שרת VPS פשוט</h3>
+                    <p><strong>מה זה:</strong> מחשב שלם בענן שאתה שולט בו</p>
+                    <p><strong>איך זה עובד:</strong> מתקין את הקוד על השרת, עובד 24/7</p>
+                    <p><strong>עלות:</strong> $5-20 לחודש</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cost-breakdown">
+            <h3>💰 כמה זה יעלה לך?</h3>
+            <table class="cost-table">
+                <thead>
+                    <tr>
+                        <th>רכיב</th>
+                        <th>Google Cloud</th>
+                        <th>Colab Pro</th>
+                        <th>VPS פשוט</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>שרת/פלטפורמה</td>
+                        <td>$0-50/חודש</td>
+                        <td>$10/חודש</td>
+                        <td>$5-20/חודש</td>
+                    </tr>
+                    <tr>
+                        <td>Claude API</td>
+                        <td>~$20/חודש</td>
+                        <td>~$20/חודש</td>
+                        <td>~$20/חודש</td>
+                    </tr>
+                    <tr>
+                        <td>דומיין</td>
+                        <td>$10/שנה</td>
+                        <td>לא נדרש</td>
+                        <td>$10/שנה</td>
+                    </tr>
+                    <tr style="background: #e8f5e8; font-weight: bold;">
+                        <td>סה"כ</td>
+                        <td>$20-70/חודש</td>
+                        <td>$30/חודש</td>
+                        <td>$25-40/חודש</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="pros-cons">
+            <div class="pros">
+                <h3>✅ יתרונות הגישה הזו</h3>
+                <ul>
+                    <li>המנהלים לא צריכים להבין טכנולוגיה</li>
+                    <li>ממשק אחיד וקבוע לכל הארגון</li>
+                    <li>דוחות עקביים ומקצועיים</li>
+                    <li>שליטה מלאה על התוכן והעיצוב</li>
+                    <li>אפשר לעדכן ולשפר מתי שרוצה</li>
+                    <li>נתונים מאובטחים בענן שלך</li>
+                </ul>
+            </div>
+            
+            <div class="cons">
+                <h3>❌ אתגרים</h3>
+                <ul>
+                    <li>צריך ללמוד קצת תכנות</li>
+                    <li>צריך לנהל שרת (אבל זה פשוט!)</li>
+                    <li>עלות חודשית קטנה</li>
+                    <li>צריך לטפל בעדכונים</li>
+                    <li>תלות ב-Claude API</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="recommended">
+            <h2>🎯 המלצה שלי בשבילך</h2>
+            <p><strong>התחל עם Google Colab Pro ($10/חודש)</strong></p>
+            <p>זה הכי פשוט להתקנה, עובד מצוין, ואחר כך אפשר להעביר למשהו יותר מתקדם</p>
+            <p><strong>בעוד 3-6 חודשים:</strong> תעבור לשרת VPS עצמאי (יותר זול וגמיש)</p>
+        </div>
+    </div>
+</body>
+</html>
